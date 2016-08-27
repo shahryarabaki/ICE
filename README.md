@@ -1,2 +1,2 @@
-# MICE
-Multiword, Idiom, Collocation Extractor
+# ICE
+Idiom, Collocation Extractor
