@@ -129,6 +129,9 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 			print("Hit results of individual words:\n", _hitResults_individual_words, file = _output_file_verbose)
 	
 	# Step 1: Calculating individual word probabilities
+	Collocations_without_uniqueness = [] # A python list to store n-grams that are collocations, without uniqueness
+	Just_ngrams_without_uniqueness = [] # A python script to store n-grams that are not collocations, without uniqueness
+
 	word_probabilities = {} # A dictionary to store the probabilities of individual words
 	if _verbose:
 		print("\nWord \t\t Total search results \t\t Universe page count \t\t Probability", file = _output_file_verbose)
