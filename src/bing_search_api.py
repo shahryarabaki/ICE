@@ -63,7 +63,7 @@ class BingSearchAPI():
             print("Bing Seach Error, error message : {0}".format(str(e)))
         return result
 
-    def search_total(self, _verbose, _search_phrase, quote = True):
+    def search_total(self, _verbose, _search_phrase):
 
         #_search_phrase_parsed = "%22" + _search_phrase.replace(' ', '+').strip(' ') + "%22" # %22 acts as quotes, facilitating a phrase search
         _search_phrase_parsed = "%22" + quote(_search_phrase.strip(' ')) + "%22"
@@ -74,7 +74,7 @@ class BingSearchAPI():
         else:
             #Set up a cache to remember the total number of hit searches retried
             #Update the diction if search_phrase is not found
-            with open("bing_search_totals.cache", 'r') as f:
+            with open("cache/bing_search_totals.cache", 'r') as f:
                 print(_search_phrase_parsed)
                 for line in f:
                     phrase, hit = line.split('/----/')
@@ -87,7 +87,7 @@ class BingSearchAPI():
         if _search_phrase in self.diction:
             return self.diction[_search_phrase], self.key
         else:
-            with open("bing_search_totals.cache", 'a') as f:
+            with open("cache/bing_search_totals.cache", 'a') as f:
                 count = 0
                 while True:
                     count = count + 1
@@ -101,14 +101,14 @@ class BingSearchAPI():
                                 print('\t', _search_phrase_parsed.replace('+', ' ').replace('%22', ''), total)
                                 pass
                             print("%s/----/%d" % (_search_phrase, total), file = f)
-                            return total#, self.key
+                            return total, self.key
                     except Exception as e:
                         if _verbose:
                             print('\tERROR: in bing.search() - search total\n\t' + str(e))
                         print('\tERROR: in bing.search() - search total\n\t' + str(e))
                         print('\tEither network connection error or Bing Api key expired. Search phrase: ' + _search_phrase_parsed)
                         if count < 10:
-                            with open("Bing_API_keys.cache") as keys_file:
+                            with open("cache/Bing_API_keys.cache") as keys_file:
                                 keys = list()
                                 for line in keys_file:
                                     keys.append(line)
