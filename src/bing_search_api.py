@@ -18,6 +18,7 @@ import json
 from urllib.parse import urlencode
 from random import randint, sample
 from urllib.request import quote
+import os
 
 
 class BingSearchAPI():
@@ -65,6 +66,10 @@ class BingSearchAPI():
 
     def search_total(self, _verbose, _search_phrase):
 
+        def _cache_abs_path(cache_rel_path):
+            script_dir = os.path.dirname(__file__)
+            return os.path.join(script_dir, cache_rel_path)
+
         #_search_phrase_parsed = "%22" + _search_phrase.replace(' ', '+').strip(' ') + "%22" # %22 acts as quotes, facilitating a phrase search
         _search_phrase_parsed = "%22" + quote(_search_phrase.strip(' ')) + "%22"
         _bing_parameters = {'$format': 'json', '$top': 2}
@@ -74,7 +79,7 @@ class BingSearchAPI():
         else:
             #Set up a cache to remember the total number of hit searches retried
             #Update the diction if search_phrase is not found
-            with open("cache/bing_search_totals.cache", 'r') as f:
+            with open(_cache_abs_path("cache/bing_search_totals.cache"), 'r') as f:
                 print(_search_phrase_parsed)
                 for line in f:
                     phrase, hit = line.split('/----/')
@@ -87,7 +92,7 @@ class BingSearchAPI():
         if _search_phrase in self.diction:
             return self.diction[_search_phrase], self.key
         else:
-            with open("cache/bing_search_totals.cache", 'a') as f:
+            with open(_cache_abs_path("cache/bing_search_totals.cache"), 'a') as f:
                 count = 0
                 while True:
                     count = count + 1
@@ -108,7 +113,7 @@ class BingSearchAPI():
                         print('\tERROR: in bing.search() - search total\n\t' + str(e))
                         print('\tEither network connection error or Bing Api key expired. Search phrase: ' + _search_phrase_parsed)
                         if count < 10:
-                            with open("cache/Bing_API_keys.cache") as keys_file:
+                            with open(_cache_abs_path("cache/Bing_API_keys.cache")) as keys_file:
                                 keys = list()
                                 for line in keys_file:
                                     keys.append(line)

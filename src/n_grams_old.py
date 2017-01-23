@@ -7,7 +7,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import punkt
 import sys
 from unidecode import unidecode
-from pos_tagger import POS_Tagger
+import os
+from .pos_tagger import POS_Tagger
 
 
 def string_to_ascii(x):
@@ -111,7 +112,8 @@ def pos_tagged_ngrams_from_sentences(_input_sentences, _n_value_for_ngram_extrac
     # Dictionary
     contraction_dictionary = {}
     # Read the text from the file, "English_contractions.txt"
-    _contractions = open("English_contractions.txt").readlines()
+    contradiction_file = os.path.join(os.path.dirname(__file__), "English_contractions.txt")
+    _contractions = open(contradiction_file).readlines()
     for _each_contraction in _contractions:
 
         _contraction, _expansion = _each_contraction.strip('\n').split('\t')[0], _each_contraction.strip('\n').split('\t')[1]

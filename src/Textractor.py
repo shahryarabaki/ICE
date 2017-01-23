@@ -53,15 +53,15 @@ Textractor_V1.py - EXECUTION FLOW
 
 """
 
-from bing_search_api import BingSearchAPI
-from collocations_method_1 import Collocations_Method_1
+from .bing_search_api import BingSearchAPI
+from .collocations_method_1 import Collocations_Method_1
 # from collocations_method_2 import Collocations_Method_2
-from collocations_method_2_parallel import Collocations_Method_2_paralllel
-from collocations_method_3 import Collocations_Method_3
-from collocations_method_5_V3 import Collocations_Method_5
-from n_grams import ngrams_from_file_lines
-from pos_tagger import POS_tag_cleaner
-from n_grams_old import pos_tagged_ngrams_from_file, pos_tagged_ngrams_from_sentences
+from .collocations_method_2_parallel import Collocations_Method_2_paralllel
+from .collocations_method_3 import Collocations_Method_3
+from .collocations_method_5_V3 import Collocations_Method_5
+from .n_grams import ngrams_from_file_lines
+from .pos_tagger import POS_tag_cleaner
+from .n_grams_old import pos_tagged_ngrams_from_file, pos_tagged_ngrams_from_sentences
 import nltk
 import os
 import re

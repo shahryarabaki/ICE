@@ -1,6 +1,6 @@
 from nltk.corpus import wordnet
 import re
-from pos_tagger import POS_tag_cleaner
+from .pos_tagger import POS_tag_cleaner
 
 # Method to determine if a phrase is a collocation based on dictionary based technique
 # Uses WordNet from NLTK corpus to obtain definitions of the words when both

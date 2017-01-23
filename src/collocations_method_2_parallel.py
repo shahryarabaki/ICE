@@ -8,15 +8,16 @@
 #!/usr/bin/Python2
 # --coding:utf-8--
 
+import os
 from bs4 import BeautifulSoup
-from bing_search_api import BingSearchAPI
+from .bing_search_api import BingSearchAPI
 import snowballstemmer
 import unicodedata
 import re
 import multiprocessing as mp
 import requests
 from random import sample
-from pos_tagger import POS_tag_cleaner
+from .pos_tagger import POS_tag_cleaner
 
 # Python list with words synonymous to 'Wikipedia', 'dictionary', 'definition'
 _list_of_synonymous_words = ['dictionary', 'lexicon', 'definition', 'meaning', 'unabridged', 'gazetteer',
@@ -187,7 +188,8 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
 
     _cached_resuls = {}
     try:
-        with open("method2.result.cache", 'r') as method2_cache:
+        method2_cache_path = os.path.join(os.path.dirname(__file__), "method2.result.cache")
+        with open(method2_cache_path, 'r') as method2_cache:
             for line in method2_cache:
                 line_cache_result = line.split('|')
                 if line_cache_result[1].strip(' \n') == "True":
@@ -245,7 +247,8 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                         _search_result_count = 0
                         unsuccessful_Count += 1
                         if unsuccessful_Count < 10:
-                            with open("cache/Bing_API_keys.cache") as keys_file:
+                            bing_api_cache = os.path.join(os.path.dirname(__file__), "cache/Bing_API_keys.cache")
+                            with open(bing_api_cache) as keys_file:
                                 keys = list()
                                 for line in keys_file:
                                     keys.append(line)
@@ -315,7 +318,8 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                 #parallel_request(_search_title, _search_url, _list_of_synonymous_words, file_path)
                 
             #if _number_of_valid_titles > 0 or _number_of_valid_urls > 0:
-                with open("method2.result.cache", 'a') as method2_cache: 
+
+                with open(method2_cache_path, 'a') as method2_cache: 
                     if True in output:
                         title_url_collocations.append(_n_gram)
                         print(_n_gram_lower + "|True", file = method2_cache)
