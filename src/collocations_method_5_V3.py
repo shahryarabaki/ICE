@@ -129,8 +129,7 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 			print("Hit results of individual words:\n", _hitResults_individual_words, file = _output_file_verbose)
 	
 	# Step 1: Calculating individual word probabilities
-	Collocations_without_uniqueness = [] # A python list to store n-grams that are collocations, without uniqueness
-	Just_ngrams_without_uniqueness = [] # A python script to store n-grams that are not collocations, without uniqueness
+	
 
 	word_probabilities = {} # A dictionary to store the probabilities of individual words
 	if _verbose:
@@ -162,6 +161,9 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 			print("%s \t\t %s \t\t %d \t\t %f" %(_n_gram, n_gram_search_total, Universe_of_the_webpages, n_gram_probability), file = _output_file_verbose)
 		phrase_probabilities[_n_gram] = n_gram_probability
 
+
+	Collocations_without_uniqueness = [] # A python list to store n-grams that are collocations, without uniqueness
+	Just_ngrams_without_uniqueness = [] # A python script to store n-grams that are not collocations, without uniqueness
 
 	_evaluate_value = pow(float(_c_value), pow(_n_value, _p_value) - 1)
 	if _verbose:
