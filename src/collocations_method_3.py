@@ -1,14 +1,13 @@
-#!/usr/bin/Python2
+#!/usr/bin/Python3.5
 # --coding:utf-8--
 
-from __future__ import print_function
 import math
 import os
 import random
 import re
-from bing_search_result_totals_V2 import bing_search_total
-from pos_tagger import POS_tag_cleaner
-from collocations_method_5_V3 import POS_Check
+from .bing_search_result_totals_V2 import bing_search_total
+from .pos_tagger import POS_tag_cleaner
+from .collocations_method_5_V3 import POS_Check
 import string
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
