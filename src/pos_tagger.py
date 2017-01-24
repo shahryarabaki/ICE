@@ -2,6 +2,7 @@ import nltk
 from nltk.corpus import ptb
 from nltk.corpus import treebank
 import re
+import os, pickle
 
 
 def POS_tag_cleaner(phrase_with_POS):
@@ -16,6 +17,12 @@ class POS_Tagger():
 
 
     def __init__(self):
+        if not self._load():
+            self._train_tagger()
+            self._save()
+
+
+    def _train_tagger(self):
         training_sents = treebank.tagged_sents()
         patterns = [  # for regexp tagger
             (r'^[\.|\?|!]$', '.'),
@@ -49,6 +56,26 @@ class POS_Tagger():
         trigram_tagger = nltk.TrigramTagger(training_sents, backoff=bigram_tagger)
 
         self.final_tagger = trigram_tagger
+
+
+    def _load(self, rel_dump_path = "cache/pos_tagger.dump"):
+        script_dir = os.path.dirname(__file__)
+        obj_dump_path = os.path.join(script_dir, rel_dump_path)
+        if os.path.isfile(obj_dump_path):
+            with open(obj_dump_path, 'rb') as obj_dump:
+                try:
+                    self.final_tagger = pickle.load(obj_dump)
+                    return True
+                except Exception as e:
+                    return False
+        return False
+
+
+    def _save(self, rel_dump_path = "cache/pos_tagger.dump"):
+        script_dir = os.path.dirname(__file__)
+        obj_dump_path = os.path.join(script_dir, rel_dump_path)
+        with open(obj_dump_path, 'wb') as obj_dump_file:
+            pickle.dump(self.final_tagger, obj_dump_file)
 
 
     def tag(self, sentence):

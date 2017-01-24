@@ -4,14 +4,14 @@
 # - Change _c_evalution cancel by inputting -1
 # - Fix integer number extraction of 0 results queries
 
-from bing_search_result_totals_V2 import bing_search_total
-from bing_search_api import BingSearchAPI
+from .bing_search_result_totals_V2 import bing_search_total
+from .bing_search_api import BingSearchAPI
+from .pos_tagger import POS_tag_cleaner
 from collections import Counter # To count the number of occurrances of each word in the n-gram
 import math
 import re
 import sys
 import os
-from pos_tagger import POS_tag_cleaner
 
 """
 Procedure:
