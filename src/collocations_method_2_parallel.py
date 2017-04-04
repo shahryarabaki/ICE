@@ -16,6 +16,8 @@ import unicodedata
 import re
 import multiprocessing as mp
 import requests
+import urllib
+import time
 from random import sample
 from .pos_tagger import POS_tag_cleaner
 
@@ -184,7 +186,6 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
     stemmer = snowballstemmer.stemmer('english')
     # Call to Bing search API
     _bing_search = BingSearchAPI(_bing_api_key)
-    _bing_search_parameters = {'$format': 'json', '$top': 10} # Top 10 search results
 
     _cached_resuls = {}
     try:
@@ -235,10 +236,20 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                 _n_gram_lower_search_phrase = 'define "%s"' %(_n_gram_lower) # Bing - Phrase search
                 successful_Request = False
                 unsuccessful_Count = 0
+
+                #_bing_search_parameters = {'$format': 'json', '$top': 10}  # Top 10 search results
+                _bing_search_parameters = urllib.parse.urlencode({
+                    # Request parameters
+                    'q': _n_gram_lower_search_phrase,
+                    'count': '10',
+                    'offset': '0',
+                    'mkt': 'en-us',
+                    'safesearch': 'Moderate',
+                })
                 while not successful_Request:
                     try: 
-                        _search_results = _bing_search.search('web', _n_gram_lower_search_phrase, _bing_search_parameters).json()
-                        _search_result_count = len(_search_results["d"]["results"][0]["Web"])
+                        _search_results = _bing_search.search(_bing_search_parameters)
+                        _search_result_count = len(_search_results["webPages"]["value"])
                         successful_Request = True
                     except Exception as e:
                         if _verbose:
@@ -255,8 +266,9 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                                 _bing_api_key = ''.join(filter(lambda x: (ord(x) < 128), sample(keys, 1)[0].strip(' \t\n\r')))
                                 unsuccessful_Count = 0
                         else:
-                            _bing_api_key = input("Please enter another Bing API key: ")
+                            #_bing_api_key = input("Please enter another Bing API key: ")
                             unsuccessful_Count = 0
+                            time.sleep(2)
                         _bing_search._set_Bing_API_key(_bing_api_key)
                         continue
                 # List to save top 10 search Titles
@@ -265,8 +277,10 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                 _search_urls = []
                 # We iterate through each of the search result and append search titles and Urls to their respective lists
                 for x in range(0, _search_result_count):
-                    _url = _search_results["d"]["results"][0]["Web"][x]["Url"]
-                    _title = _search_results["d"]["results"][0]["Web"][x]["Title"]
+                    #_url = _search_results["d"]["results"][0]["Web"][x]["Url"]
+                    #_title = _search_results["d"]["results"][0]["Web"][x]["Title"]
+                    _url = _search_results["webPages"]["value"][x]["url"]
+                    _title = _search_results["webPages"]["value"][x]["name"]
                     _title = unicodedata.normalize('NFKD', _title).encode('ascii','ignore').decode("utf-8")
                     _url = unicodedata.normalize('NFKD', _url).encode('ascii','ignore').decode("utf-8")
                     _search_titles.append(_title)

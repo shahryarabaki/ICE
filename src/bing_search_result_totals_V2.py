@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from .bing_search_api import BingSearchAPI
 from random import randint, sample
 from urllib.request import quote
+import urllib
+import time
 
 def bing_search_total(_verbose, _search_phrase, _bing_api_key):
 
@@ -17,8 +19,15 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
     
 
     #_search_phrase_parsed = "%22" + _search_phrase.replace(' ', '+').strip(' ') + "%22" # %22 acts as quotes, facilitating a phrase search
-    _search_phrase_parsed = "%22" + quote(_search_phrase.strip(' ')) + "%22"
-    _bing_parameters = {'$format': 'json', '$top': 2}
+    _search_phrase_parsed = _search_phrase.strip(' ')
+    _bing_parameters = urllib.parse.urlencode({
+        # Request parameters
+        'q': _search_phrase_parsed,
+        'count': '2',
+        'offset': '0',
+        'mkt': 'en-us',
+        'safesearch': 'Moderate',
+    })
 
     #Set up a cache to remember the total number of hit searches retried
     with open(cache_abs_path("cache/bing_search_totals.cache"), 'r') as f:
@@ -41,8 +50,11 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                 count = count + 1
                 try:
                     _bing_search = BingSearchAPI(_bing_api_key)
-                    res = _bing_search.search('web', _search_phrase_parsed, _bing_parameters).json()
-                    total_search_results = res["d"]["results"][0]["WebTotal"]
+                    res = _bing_search.search(_bing_parameters)
+                    if len(res["rankingResponse"]) == 0:
+                        total_search_results = 0
+                    else:
+                        total_search_results = res["webPages"]["totalEstimatedMatches"]
                     print('-----' + str(total_search_results) + '-----------')
                     total = int(total_search_results)
                     if(isinstance(total, int)):
@@ -55,6 +67,7 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                     if _verbose:
                         print('\tERROR: in bing.search() - search total\n\t' + str(e))
                     print('\tERROR: in bing.search() - search total\n\t' + str(e))
+                    print("[Errno {0}] {1}".format(e.errno, e.strerror))
                     print('\tEither network connection error or Bing Api key expired. Search phrase: ' + _search_phrase_parsed)
                     if count < 10:
                         with open(cache_abs_path("cache/Bing_API_keys.cache")) as keys_file:
@@ -63,8 +76,10 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                                 keys.append(line)
                             _bing_api_key = ''.join(filter(lambda x: (ord(x) < 128), sample(keys, 1)[0].strip(' \t\n\r')))
                     else:
-                        _bing_api_key = input("Please enter another Bing API key: ")
+                        #_bing_api_key = input("Please enter another Bing API key: ")
+                        time.sleep(2)
                         count = 0
+
 
             
 # Test

@@ -24,6 +24,7 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
         if _verbose:
             print('\tERROR: in bing.search() - search total\n\t' + str(e))
         print('\tERROR: in bing.search() - search total\n\t' + str(e))
+        print("[Errno {0}] {1}".format(e.errno, e.strerror))
         return 0
 # Test
 #bing_search_total(True, "Natural Language Processing", "U5Px9AJDGqcMOJVfwZLFa5GfCHi1e6DLwCl+0tt/NX4")

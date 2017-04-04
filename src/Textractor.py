@@ -136,7 +136,7 @@ class CollocationExtractor:
 
 
         final_collocations = []
-
+        print("1")
         if self._extract_collocations:
             if self._collocation_method_1:
                 # Extracting Collocations - Method-1 - Dictionary search
@@ -144,13 +144,13 @@ class CollocationExtractor:
                 _n_grams_from_input_text_file = n_grams_not_collocations
                 final_collocations.extend(wordnet_collocations)
 
-
+            print("2")
             if self._collocation_method_2:
                 # Extracting Collocations - Method-2 - Bing search API: Title_Url based technique
                 title_url_collocations, n_grams_not_collocations = Collocations_Method_2_paralllel(self._bing_api_key, _n_grams_from_input_text_file, self._input_file_path, self._apply_POS_restrictions, self._verbose)
                 _n_grams_from_input_text_file = n_grams_not_collocations
                 final_collocations.extend(title_url_collocations)
-
+            print("3")
             if self._collocation_method_3:
                 # Extracting Collocations - Method-3 - Statistical technique
                 # self._collocation_corpora is a list of corpora selected by the user

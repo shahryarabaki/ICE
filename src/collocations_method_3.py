@@ -575,7 +575,8 @@ def Collocations_Method_3(_bing_api_key, _n_grams_from_input_text_file, _input_f
 	#if we use the input text files
 	_n_grams_from_input_text_file_not_have_replacements = []
 
-	choose_input_replacement_phrases = input("Do you want to read the replacement phrases from the files?")
+	#choose_input_replacement_phrases = input("Do you want to read the replacement phrases from the files?")
+	choose_input_replacement_phrases = "Y"
 	_replacement_queries_from_files = {}
 	if choose_input_replacement_phrases.upper() == "Y":
 		try:

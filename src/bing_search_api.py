@@ -17,8 +17,10 @@ import string
 import json
 from urllib.parse import urlencode
 from random import randint, sample
+import time
 from urllib.request import quote
 import os
+import http, urllib
 
 
 class BingSearchAPI():
@@ -42,24 +44,20 @@ class BingSearchAPI():
         request = request.replace(':', '%3a')
         return request
         
-    def search(self, sources, query, params):
-        ''' This function expects a dictionary of query parameters and values.
-            Sources and Query are mandatory fields. 
-            Sources is required to be the first parameter.
-            Both Sources and Query requires single quotes surrounding it.
-            All parameters are case sensitive. Go figure.
+    def search(self, params):
 
-            For the Bing Search API schema, go to http://www.bing.com/developers/
-            Click on Bing Search API. Then download the Bing API Schema Guide
-            (which is oddly a word document file...pretty lame for a web api doc)
-        '''
-        request =  'Sources="' + sources    + '"'
-        request += '&Query="'  + str(query) + '"'
-        for key, value in params.items():
-            request += '&' + key + '=' + str(value)
-        request = self.bing_api + self.replace_symbols(request)
-        try:                
-            result = requests.get(request, auth=(self.key, self.key), timeout = 4.0)
+        headers = {
+            # Request headers
+            'Ocp-Apim-Subscription-Key': self.key,
+        }
+
+        try:
+            conn = http.client.HTTPSConnection('api.cognitive.microsoft.com')
+            conn.request("GET", "/bing/v5.0/search?%s" % params, "{body}", headers)
+            response = conn.getresponse()
+            data = response.read()
+            result = json.loads(data)
+            conn.close()
         except requests.exceptions.RequestException as e:
             print("Bing Seach Error, error message : {0}".format(str(e)))
         return result
@@ -71,8 +69,17 @@ class BingSearchAPI():
             return os.path.join(script_dir, cache_rel_path)
 
         #_search_phrase_parsed = "%22" + _search_phrase.replace(' ', '+').strip(' ') + "%22" # %22 acts as quotes, facilitating a phrase search
-        _search_phrase_parsed = "%22" + quote(_search_phrase.strip(' ')) + "%22"
-        _bing_parameters = {'$format': 'json', '$top': 2}
+        #_search_phrase_parsed = "%22" + quote(_search_phrase.strip(' ')) + "%22"
+        #_bing_parameters = {'$format': 'json', '$top': 2}
+        _search_phrase_parsed = _search_phrase.strip(' ')
+        _bing_parameters = urllib.parse.urlencode({
+            # Request parameters
+            'q': _search_phrase_parsed,
+            'count': '2',
+            'offset': '0',
+            'mkt': 'en-us',
+            'safesearch': 'Moderate',
+        })
 
         if _search_phrase in self.diction:
             return self.diction[_search_phrase], self.key
@@ -97,8 +104,11 @@ class BingSearchAPI():
                 while True:
                     count = count + 1
                     try:
-                        res = self.search('web', _search_phrase_parsed, _bing_parameters).json()
-                        total_search_results = res["d"]["results"][0]["WebTotal"]
+                        res = self.search(_bing_parameters)
+                        if len(res["rankingResponse"]) == 0:
+                            total_search_results = 0
+                        else:
+                            total_search_results = res["webPages"]["totalEstimatedMatches"]
                         print('-----' + str(total_search_results) + '-----------')
                         total = int(total_search_results)
                         if(isinstance(total, int)):
@@ -119,5 +129,7 @@ class BingSearchAPI():
                                     keys.append(line)
                                 self.key = ''.join(filter(lambda x: (ord(x) < 128), sample(keys, 1)[0].strip(' \t\n\r')))
                         else:
-                            self.key = input("Please enter another Bing API key: ")
+                            #self.key = input("Please enter another Bing API key: ")
+                            time.sleep(2)
                             count = 0
+                            #return -1, _bing_api_key
