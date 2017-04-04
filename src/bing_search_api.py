@@ -54,7 +54,7 @@ class BingSearchAPI():
         conn = http.client.HTTPSConnection('api.cognitive.microsoft.com')
         conn.request("GET", "/bing/v5.0/search?%s" % params, "{body}", headers)
         response = conn.getresponse()
-        data = response.read()
+        data = response.read().decode('utf-8')
         result = json.loads(data)
         conn.close()
 
