@@ -32,7 +32,8 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
     #Set up a cache to remember the total number of hit searches retried
     with open(cache_abs_path("cache/bing_search_totals.cache"), 'r') as f:
         diction = {}
-        print(_search_phrase_parsed)
+        if _verbose:
+            print(_search_phrase_parsed)
         for line in f:
             phrase, hit = line.split('/----/')
             try:
@@ -55,7 +56,8 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                         total_search_results = 0
                     else:
                         total_search_results = res["webPages"]["totalEstimatedMatches"]
-                    print('-----' + str(total_search_results) + '-----------')
+                    if _verbose:
+                        print('-----' + str(total_search_results) + '-----------')
                     total = int(total_search_results)
                     if(isinstance(total, int)):
                         if _verbose:

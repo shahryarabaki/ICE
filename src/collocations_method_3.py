@@ -33,7 +33,7 @@ def min(a, b):
 
 # Statistical technique
 def Collocations_Method_3(_bing_api_key, _n_grams_from_input_text_file, _input_file_path, _collocation_corpora, _apply_POS_restrictions, _verbose):
-	print(_n_grams_from_input_text_file)
+	#print(_n_grams_from_input_text_file)
 	if _verbose:
 		# A file to save the verbose output of the program
 		_output_file_verbose = str(_input_file_path).replace(_input_file_path.split('/')[-1], 'verbose.txt')
@@ -972,7 +972,8 @@ def Collocations_Method_3(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		while _c_temp <= end_c_value:
 			string_values_of_c.append("{number:.{decimal}f}".format(number = _c_temp, decimal = _c_decimal))
 			_c_temp += _c_increment
-		print("Values of 'c' constant: " + str(string_values_of_c))
+		if _verbose:
+			print("Values of 'c' constant: " + str(string_values_of_c))
 
 		for _string_c_value in string_values_of_c:
 			_c_value = float(_string_c_value)

@@ -137,7 +137,7 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		_n_gram = re.sub(r'_.*? ', ' ', _n_gram.strip('\n').lstrip(' ')).rstrip(' ')
 		try:
 			n_gram_search_total = _hitResults_input_queries[_n_gram]
-		except Exception, e:
+		except Exception as e:
 			print(str(e))
 			
 		n_gram_probability = float(n_gram_search_total) / Universe_of_the_webpages
@@ -209,7 +209,7 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 				_word = _word.lstrip(' ').rstrip(' ').strip('\n')
 				try:
 					product_of_individual_word_probabilities *= word_probabilities[_word]
-				except Exception, e:
+				except Exception as e:
 					print("ERROR: Method-5 \n\t%s" %(str(e)))
 					product_of_individual_word_probabilities *= 1
 			if _verbose:

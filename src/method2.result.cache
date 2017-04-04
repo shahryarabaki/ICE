@@ -29,3 +29,12 @@ all keys|False
 keys on|False
 on the|False
 the line|False
+john likes|False
+likes the|True
+the blue|True
+blue house|True
+house at|True
+at the|True
+the end|True
+end of|True
+of the|True

@@ -170,10 +170,10 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		print(("\nTechnique-1: Uniqueness of words in the n-gram is not taken into consideration.\n\n"
 			"N-gram \t\tProbability \t\t Product of individual word probabilities"), file = _output_file_verbose)
 	for n_gram in phrase_probabilities:
-	
 
-		print("N value is %d" % (_n_value))
-		print("Evaluate value is: " + str(_evaluate_value))
+		if _verbose:
+			print("N value is %d" % (_n_value))
+			print("Evaluate value is: " + str(_evaluate_value))
 
 		_words_in_ngram = n_gram.lstrip(' ').rstrip(' ').strip('\n').split()
 		product_of_individual_word_probabilities = 1

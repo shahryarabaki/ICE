@@ -309,7 +309,8 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                 def log_output(result):
                     output.append(result)
 
-                print(_n_gram_lower_search_phrase)
+                if _verbose:
+                    print(_n_gram_lower_search_phrase)
                 with mp.Pool(processes=4) as pool:
                     for x in range(0, _number_of_search_results_returned):
                         result = pool.apply_async(parallel_request, args=(_search_titles[x], _search_urls[x], _output_file_verbose_path, x, _n_gram_lower, _n_gram_lower_no_spaces, _verbose,), callback = log_output)
@@ -321,7 +322,8 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                     #output = [p.get() for p in results]#results
                     #print(output)
                     #count += 1
-                print(output)
+                if _verbose:
+                    print(output)
                     
                 #if count % 1000 == 0:
                 #   #print('.')

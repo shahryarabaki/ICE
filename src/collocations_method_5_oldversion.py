@@ -79,7 +79,7 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
         # Read original search queries
         _original_input_queries = open(original_input_queries_file).readlines()
         if len(_input_queries_hitResults) == len(_original_input_queries):
-            for _x in xrange(0, len(_input_queries_hitResults)):
+            for _x in range(0, len(_input_queries_hitResults)):
                 _each_line = _input_queries_hitResults[_x].strip('\n').replace("Total # Hits for: ", '').split(" = ")
                 # Last second element will be the query, enclosed in quotes followed by '~1' as long as the program retuns an exact match.
                 #       Some times when an exact match is not found, an approximate match, i.e. hit-results for individual
@@ -184,9 +184,9 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 
         _evaluate_value = _c_value
 
-        print("N value is %d" % (_n_value))
-        print("Evaluate value is: " + str(_evaluate_value))
         if _verbose:
+            print("N value is %d" % (_n_value))
+            print("Evaluate value is: " + str(_evaluate_value))
             print("\nTechnique-1: Uniqueness of words in the n-gram is not taken into consideration.\n\nN-gram \t\t \
     Probability \t\t Product of individual word probabilities", file = _output_file_verbose)
         for n_gram in phrase_probabilities:

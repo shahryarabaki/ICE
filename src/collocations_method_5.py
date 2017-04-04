@@ -74,7 +74,7 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		# Read original search queries
 		_original_input_queries = open(original_input_queries_file).readlines()
 		if len(_input_queries_hitResults) == len(_original_input_queries):
-			for _x in xrange(0, len(_input_queries_hitResults)):
+			for _x in range(0, len(_input_queries_hitResults)):
 				_each_line = _input_queries_hitResults[_x].strip('\n').replace("Total # Hits for: ", '').split(" = ")
 				# Last second element will be the query, enclosed in quotes followed by '~1' as long as the program retuns an exact match.
 				#		Some times when an exact match is not found, an approximate match, i.e. hit-results for individual
@@ -96,7 +96,7 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		_individual_words = open(individual_words).readlines()
 
 		if len(_individual_word_hitResults) == len(_individual_words):
-			for _x in xrange(0, len(_individual_word_hitResults)):
+			for _x in range(0, len(_individual_word_hitResults)):
 				_each_line = _individual_word_hitResults[_x].strip('\n').replace("Total # Hits for: ", '').split(" = ")
 				# Last second element will be the query, enclosed in quotes followed by '~1' as long as the program retuns an exact match.
 				#		Some times when an exact match is not found, an approximate match, i.e. hit-results for individual
@@ -130,7 +130,7 @@ def Collocations_Method_5(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		_n_gram = re.sub(r'_.*? ', ' ', _n_gram.strip('\n').lstrip(' ')).rstrip(' ')
 		try:
 			n_gram_search_total = _hitResults_input_queries[_n_gram]
-		except Exception, e:
+		except Exception as e:
 			print(str(e))
 			
 		n_gram_probability = float(n_gram_search_total) / Universe_of_the_webpages
@@ -196,7 +196,7 @@ Probability \t\t Product of individual word probabilities", file = _output_file_
 			_word = _word.lstrip(' ').rstrip(' ').strip('\n')
 			try:
 				product_of_individual_word_probabilities *= word_probabilities[_word]
-			except Exception, e:
+			except Exception as e:
 				print("ERROR: Method-5 \n\t%s" %(str(e)))
 				product_of_individual_word_probabilities *= 1
 		if _verbose:

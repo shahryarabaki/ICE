@@ -136,7 +136,6 @@ class CollocationExtractor:
 
 
         final_collocations = []
-        print("1")
         if self._extract_collocations:
             if self._collocation_method_1:
                 # Extracting Collocations - Method-1 - Dictionary search
@@ -144,13 +143,12 @@ class CollocationExtractor:
                 _n_grams_from_input_text_file = n_grams_not_collocations
                 final_collocations.extend(wordnet_collocations)
 
-            print("2")
             if self._collocation_method_2:
                 # Extracting Collocations - Method-2 - Bing search API: Title_Url based technique
                 title_url_collocations, n_grams_not_collocations = Collocations_Method_2_paralllel(self._bing_api_key, _n_grams_from_input_text_file, self._input_file_path, self._apply_POS_restrictions, self._verbose)
                 _n_grams_from_input_text_file = n_grams_not_collocations
                 final_collocations.extend(title_url_collocations)
-            print("3")
+
             if self._collocation_method_3:
                 # Extracting Collocations - Method-3 - Statistical technique
                 # self._collocation_corpora is a list of corpora selected by the user
@@ -172,13 +170,14 @@ class CollocationExtractor:
                     # Obtain the phrase search totals
                     count = 0
                     length = len(_n_grams_from_input_text_file)
-                    print(length)
+
                     int_percent = 0
                     for _n_gram in _n_grams_from_input_text_file:
                         count += 1
                         if int((count * 100) / length) > int_percent:
                             int_percent = int((count * 100) / length)
-                            print(str(int_percent) + "%")
+                            if self._verbose:
+                                print(str(int_percent) + "%")
                         # Remove the POS tags attached
                         _n_gram = POS_tag_cleaner(_n_gram)
                         _phrase_search_total_dictionary[_n_gram], self._bing_api_key = _bing_search.search_total(False, _n_gram)
@@ -193,7 +192,8 @@ class CollocationExtractor:
                     count += 1
                     if int((count * 100) / length) > int_percent:
                         int_percent = int((count * 100) / length)
-                        print(int_percent)
+                        if self._verbose:
+                            print(int_percent)
                     ## TODO: don't search for words that appear only in n-grams with wrong POS tags
                     # Remove the POS tags attached
                     _n_gram = POS_tag_cleaner(_n_gram)
@@ -534,13 +534,13 @@ class CollocationExtractor:
                     # Obtain the phrase search totals
                     count = 0
                     length = len(_n_grams_from_input_text_file)
-                    print(length)
                     int_percent = 0
                     for _n_gram in _n_grams_from_input_text_file:
                         count += 1
                         if int((count * 100) / length) > int_percent:
                             int_percent = int((count * 100) / length)
-                            print(str(int_percent) + "%")
+                            if self._verbose:
+                                print(str(int_percent) + "%")
                         # Remove the POS tags attached
                         _n_gram = POS_tag_cleaner(_n_gram)
                         _phrase_search_total_dictionary[_n_gram], self._bing_api_key = _bing_search.search_total(False, _n_gram)
@@ -555,7 +555,8 @@ class CollocationExtractor:
                     count += 1
                     if int((count * 100) / length) > int_percent:
                         int_percent = int((count * 100) / length)
-                        print(int_percent)
+                        if self._verbose:
+                            print(int_percent)
                     ## TODO: don't search for words that appear only in n-grams with wrong POS tags
                     # Remove the POS tags attached
                     _n_gram = POS_tag_cleaner(_n_gram)
