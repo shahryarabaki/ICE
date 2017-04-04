@@ -7,12 +7,11 @@ import os, importlib
 
 from src.Textractor import CollocationExtractor
 
+if __name__ == '__main__':
+    textractor = CollocationExtractor.with_collocation_pipeline ('T1', bing_key="{key}", pos_check=False, verbose=False)
+    results = textractor.get_collocations_of_length(
+    #    ["President Donald Trump's son-in-law and senior adviser, Jared Kushner, is visiting Iraq with the chairman of the Joint Chiefs of Staff, an official said Sunday night."], 2)
+     #   ["On one episode she mentions she had an ancestor who served on HMS bounty who took fletcher."], 2)
+        ["he and Chazz duel with all keys on the line."], 2)
 
-
-textractor = CollocationExtractor.with_collocation_pipeline('T1')
-
-results = textractor.get_collocations_of_length(
-    ["On one episode she mentions she had an ancestor who served on HMS bounty who took fletcher."],
-    2)
-
-print(results)
+    print(results)
