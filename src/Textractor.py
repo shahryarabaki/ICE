@@ -229,6 +229,10 @@ class CollocationExtractor:
                 # Call collocations Method-5
                 independence_collocations, self._bing_api_key = Collocations_Method_5(self._bing_api_key, _n_grams_from_input_text_file, self._input_file_path, self._apply_POS_restrictions, _phrase_search_total_dictionary, _individual_word_hit_results, _corpus, original_input_queries_file, individual_words, self._verbose, _version = 1)
                 final_collocations.extend(independence_collocations)
+
+        #temporary fix for ["John likes the blue house at the end of the street."] input
+        final_collocations = list(map(POS_tag_cleaner, final_collocations))
+        
         return final_collocations
 
 
