@@ -7,5 +7,4 @@ six==1.10.0
 snowballstemmer==1.2.1
 Unidecode==0.4.19
 urbandict==0.5
-Werkzeug==0.12.1
 wordnik-py3==2.1.2
