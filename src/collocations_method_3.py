@@ -957,9 +957,13 @@ def Collocations_Method_3(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		good_input = False
 		while not good_input:
 			try:
-				start_c_value, end_c_value = map(float, input("Please enter the constant 'c' values' range start and end: ").split(" "))
-				_c_increment = float(input("Please enter the amount of increase on constant 'c' value: "))
-				_c_decimal = eval(input("Please enter the number of decimals on constant 'c': "))
+				#start_c_value, end_c_value = map(float, input("Please enter the constant 'c' values' range start and end: ").split(" "))
+				start_c_value=13.1
+				end_c_value=13.1
+				#_c_increment = float(input("Please enter the amount of increase on constant 'c' value: "))
+				_c_increment = 0.1
+				#_c_decimal = eval(input("Please enter the number of decimals on constant 'c': "))
+				_c_decimal = 1
 				good_input = True
 			except Exception as e:
 				print("ERROR Input, message: {0}".format(str(e)))
@@ -1040,7 +1044,8 @@ def Collocations_Method_3(_bing_api_key, _n_grams_from_input_text_file, _input_f
 			print("----------------------------------------------------------------------------------------\n\n", file = _output_file_verbose)
 			print("\t\tMethod-3: Collocation extraction - successful")
 
-		redo = input("Do you want to redo method 3 substitution with other c values? (Enter NOWAY to exit): ")
+		#redo = input("Do you want to redo method 3 substitution with other c values? (Enter NOWAY to exit): ")
+		redo = "NOWAY"
 		if redo.upper() == "NOWAY":
 			doCalculation = False
 			if _verbose:
