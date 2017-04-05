@@ -10,6 +10,12 @@ from urllib.request import quote
 import urllib
 import time
 
+class InvalidKeyException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 def bing_search_total(_verbose, _search_phrase, _bing_api_key):
 
     def cache_abs_path(cache_rel_path):
@@ -52,6 +58,8 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                 try:
                     _bing_search = BingSearchAPI(_bing_api_key)
                     res = _bing_search.search(_bing_parameters)
+                    if "statusCode" in res:
+                        raise InvalidKeyException(res["statusCode"])
                     if "webPages" in res:
                         total_search_results = res["webPages"]["totalEstimatedMatches"]
                     else:
@@ -63,10 +71,9 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                         if _verbose:
                             print('\t', _search_phrase_parsed.replace('+', ' ').replace('%22', ''), total)
                             pass
-                        if _verbose:
-                            print("%s/----/%d" % (_search_phrase, total), file = f)
+                        print("%s/----/%d" % (_search_phrase, total), file = f)
                         return total, _bing_api_key
-                except Exception as e:
+                except InvalidKeyException as e:
                     if _verbose:
                         print('\tERROR: in bing.search() - search total\n\t' + str(e))
                     print('\tERROR: in bing.search() - search total\n\t' + str(e))
@@ -80,8 +87,15 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                             _bing_api_key = ''.join(filter(lambda x: (ord(x) < 128), sample(keys, 1)[0].strip(' \t\n\r')))
                     else:
                         #_bing_api_key = input("Please enter another Bing API key: ")
-                        time.sleep(2)
                         count = 0
+                        exit(-1)
+                except Exception as e:
+                    if _verbose:
+                        print('\tERROR: in bing.search() - search total\n\t' + str(e))
+                    print('\tERROR: in bing.search() - search total\n\t' + str(e))
+                    #self.key = input("Please enter another Bing API key: ")
+                    count = 0
+                    exit(-1)
 
 
             
