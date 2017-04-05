@@ -62,6 +62,7 @@ from .collocations_method_5_V3 import Collocations_Method_5
 from .n_grams import ngrams_from_file_lines
 from .pos_tagger import POS_tag_cleaner
 from .n_grams_old import pos_tagged_ngrams_from_file, pos_tagged_ngrams_from_sentences
+from .Idiom.MWE_well_defined import mwe
 import nltk
 import os
 import re
@@ -136,12 +137,14 @@ class CollocationExtractor:
 
 
         final_collocations = []
+
         if self._extract_collocations:
             if self._collocation_method_1:
                 # Extracting Collocations - Method-1 - Dictionary search
                 wordnet_collocations, n_grams_not_collocations = Collocations_Method_1(_n_grams_from_input_text_file, self._input_file_path, self._apply_POS_restrictions, self._verbose)
                 _n_grams_from_input_text_file = n_grams_not_collocations
                 final_collocations.extend(wordnet_collocations)
+
 
             if self._collocation_method_2:
                 # Extracting Collocations - Method-2 - Bing search API: Title_Url based technique
@@ -170,14 +173,13 @@ class CollocationExtractor:
                     # Obtain the phrase search totals
                     count = 0
                     length = len(_n_grams_from_input_text_file)
-
+                    print(length)
                     int_percent = 0
                     for _n_gram in _n_grams_from_input_text_file:
                         count += 1
                         if int((count * 100) / length) > int_percent:
                             int_percent = int((count * 100) / length)
-                            if self._verbose:
-                                print(str(int_percent) + "%")
+                            print(str(int_percent) + "%")
                         # Remove the POS tags attached
                         _n_gram = POS_tag_cleaner(_n_gram)
                         _phrase_search_total_dictionary[_n_gram], self._bing_api_key = _bing_search.search_total(False, _n_gram)
@@ -192,8 +194,7 @@ class CollocationExtractor:
                     count += 1
                     if int((count * 100) / length) > int_percent:
                         int_percent = int((count * 100) / length)
-                        if self._verbose:
-                            print(int_percent)
+                        print(int_percent)
                     ## TODO: don't search for words that appear only in n-grams with wrong POS tags
                     # Remove the POS tags attached
                     _n_gram = POS_tag_cleaner(_n_gram)
@@ -229,10 +230,6 @@ class CollocationExtractor:
                 # Call collocations Method-5
                 independence_collocations, self._bing_api_key = Collocations_Method_5(self._bing_api_key, _n_grams_from_input_text_file, self._input_file_path, self._apply_POS_restrictions, _phrase_search_total_dictionary, _individual_word_hit_results, _corpus, original_input_queries_file, individual_words, self._verbose, _version = 1)
                 final_collocations.extend(independence_collocations)
-
-        #temporary fix for ["John likes the blue house at the end of the street."] input
-        final_collocations = list(map(POS_tag_cleaner, final_collocations))
-        
         return final_collocations
 
 
@@ -538,13 +535,13 @@ class CollocationExtractor:
                     # Obtain the phrase search totals
                     count = 0
                     length = len(_n_grams_from_input_text_file)
+                    print(length)
                     int_percent = 0
                     for _n_gram in _n_grams_from_input_text_file:
                         count += 1
                         if int((count * 100) / length) > int_percent:
                             int_percent = int((count * 100) / length)
-                            if self._verbose:
-                                print(str(int_percent) + "%")
+                            print(str(int_percent) + "%")
                         # Remove the POS tags attached
                         _n_gram = POS_tag_cleaner(_n_gram)
                         _phrase_search_total_dictionary[_n_gram], self._bing_api_key = _bing_search.search_total(False, _n_gram)
@@ -559,8 +556,7 @@ class CollocationExtractor:
                     count += 1
                     if int((count * 100) / length) > int_percent:
                         int_percent = int((count * 100) / length)
-                        if self._verbose:
-                            print(int_percent)
+                        print(int_percent)
                     ## TODO: don't search for words that appear only in n-grams with wrong POS tags
                     # Remove the POS tags attached
                     _n_gram = POS_tag_cleaner(_n_gram)
@@ -597,6 +593,23 @@ class CollocationExtractor:
                 self._bing_api_key = Collocations_Method_5(self._bing_api_key, _n_grams_from_input_text_file, self._input_file_path, self._apply_POS_restrictions, _phrase_search_total_dictionary, _individual_word_hit_results, _corpus, original_input_queries_file, individual_words, self._verbose)
 
         _output_file_verbose.close()
+
+class IdiomExtractor:
+
+    def __init__(self, debug_level = logging.INFO):
+        logger = logging.getLogger(__name__)
+        logger.setLevel(debug_level)
+
+    def get_idioms_of_length(self, sentences = [], length = 2, method = "I"):
+        n_value = length
+        _n_grams_from_input_text_file = pos_tagged_ngrams_from_sentences(sentences, n_value, False, False)
+
+        result_idioms = mwe(_n_grams_from_input_text_file, method)
+        non_pos_idioms = list(map(POS_tag_cleaner, result_idioms))
+
+        return non_pos_idioms
+
+
                     
 if __name__ == "__main__":
     textractor = CollocationExtractor()
