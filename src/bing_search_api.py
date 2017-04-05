@@ -127,8 +127,7 @@ class BingSearchAPI():
                     except InvalidKeyException as e:
                         if _verbose:
                             print('\tERROR: in bing.search() - search total\n\t' + str(e))
-                        print('\tERROR: in bing.search() - search total\n\t' + str(e))
-                        print('\tEither network connection error or Bing Api key expired. Search phrase: ' + _search_phrase_parsed)
+                            print('\tEither network connection error or Bing Api key expired. Search phrase: ' + _search_phrase_parsed)
                         if count < 10:
                             with open(_cache_abs_path("cache/Bing_API_keys.cache")) as keys_file:
                                 keys = list()
