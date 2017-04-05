@@ -6,7 +6,6 @@ import math
 import os
 import random
 import re
-from .bing_search_result_totals_V2 import bing_search_total
 from .pos_tagger import POS_tag_cleaner
 from .collocations_method_5_V3 import POS_Check
 import string
@@ -922,30 +921,15 @@ def Collocations_Method_3(_bing_api_key, _n_grams_from_input_text_file, _input_f
 	#n_grams_not_collocations = list(set(n_grams_not_collocations))
 
 	#proxy_file_name = input("Name of the file containing proxies to use: ?")
-	diction_search_hits_totals_from_file = {}
-	with open(cache_abs_path("cache/bing_search_totals.cache"), 'r') as f:
-		for line in f:
-			phrase, hit = line.split('/----/')
-			try:
-				hit = ''.join(filter(lambda x: x.isdigit(), hit))
-				diction_search_hits_totals_from_file[phrase] = int(hit)
-			except Exception as e:
-				print("Diction cache error for " + hit)
-	search_queries_to_be_physicall_requested = []
-	for _phrase in search_queries:
-		if _phrase in diction_search_hits_totals_from_file:
-			search_queries[_phrase] = diction_search_hits_totals_from_file[_phrase]
-		else:
-			search_queries_to_be_physicall_requested.append(_phrase)
 
 
 	# Configure the settings for GoogleScraper
 	
 
-	if len(search_queries_to_be_physicall_requested) > 0:
-		queries_with_quotes = [('"' + x + '"') for x in search_queries_to_be_physicall_requested]
+	if len(search_queries) > 0:
+		#queries_with_quotes = [('"' + x + '"') for x in search_queries_to_be_physicall_requested]
 		_bing_search = BingSearchAPI(_bing_api_key)
-		for bing_query in search_queries_to_be_physicall_requested:
+		for bing_query in search_queries:
 			bing_query_with_quotes = '"' + bing_query + '"'
 			search_queries[bing_query], _bing_api_key = _bing_search.search_total(False, bing_query_with_quotes)
 			

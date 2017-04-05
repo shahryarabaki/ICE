@@ -28,12 +28,26 @@ class InvalidKeyException(Exception):
     def __str__(self):
         return repr(self.value)
 
+def _cache_abs_path(cache_rel_path):
+    script_dir = os.path.dirname(__file__)
+    return os.path.join(script_dir, cache_rel_path)
+
 class BingSearchAPI():
-    bing_api = "https://api.datamarket.azure.com/Data.ashx/Bing/Search/Composite?" # Composite options searches everywhere, i.e. {web+image+video+news+spell}
-    
+    #bing_api = "https://api.datamarket.azure.com/Data.ashx/Bing/Search/Composite?" # Composite options searches everywhere, i.e. {web+image+video+news+spell}
+
     def __init__(self, key):
         self.key = key
         self.diction = {}
+        # Set up a cache to remember the total number of hit searches retried
+        # Update the diction if search_phrase is not found
+        with open(_cache_abs_path("cache/bing_search_totals.cache"), 'r') as f:
+            for line in f:
+                phrase, hit = line.split('/----/')
+                try:
+                    hit = ''.join(filter(lambda x: x.isdigit(), hit))
+                    self.diction[phrase] = int(hit)
+                except Exception as e:
+                    print("Diction cache error for " + hit)
 
     def _set_Bing_API_key(self, key):
         self.key = key
@@ -67,10 +81,6 @@ class BingSearchAPI():
 
     def search_total(self, _verbose, _search_phrase):
 
-        def _cache_abs_path(cache_rel_path):
-            script_dir = os.path.dirname(__file__)
-            return os.path.join(script_dir, cache_rel_path)
-
         #_search_phrase_parsed = "%22" + _search_phrase.replace(' ', '+').strip(' ') + "%22" # %22 acts as quotes, facilitating a phrase search
         #_search_phrase_parsed = "%22" + quote(_search_phrase.strip(' ')) + "%22"
         #_bing_parameters = {'$format': 'json', '$top': 2}
@@ -83,22 +93,6 @@ class BingSearchAPI():
             'mkt': 'en-us',
             'safesearch': 'Moderate',
         })
-
-        if _search_phrase in self.diction:
-            return self.diction[_search_phrase], self.key
-        else:
-            #Set up a cache to remember the total number of hit searches retried
-            #Update the diction if search_phrase is not found
-            with open(_cache_abs_path("cache/bing_search_totals.cache"), 'r') as f:
-                if _verbose:
-                    print(_search_phrase_parsed)
-                for line in f:
-                    phrase, hit = line.split('/----/')
-                    try:
-                        hit = ''.join(filter(lambda x: x.isdigit(), hit))
-                        self.diction[phrase] = int(hit)
-                    except Exception as e:
-                        print("Diction cache error for " + hit)
 
         if _search_phrase in self.diction:
             return self.diction[_search_phrase], self.key
@@ -123,6 +117,7 @@ class BingSearchAPI():
                                 print('\t', _search_phrase_parsed.replace('+', ' ').replace('%22', ''), total)
                                 pass
                             print("%s/----/%d" % (_search_phrase, total), file = f)
+                            self.diction[_search_phrase] = total
                             return total, self.key
                     except InvalidKeyException as e:
                         if _verbose:

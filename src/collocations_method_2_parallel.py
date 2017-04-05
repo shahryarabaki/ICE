@@ -20,11 +20,13 @@ import urllib
 import time
 from random import sample
 from .pos_tagger import POS_tag_cleaner
+from .bing_search_api import InvalidKeyException
 
 # Python list with words synonymous to 'Wikipedia', 'dictionary', 'definition'
 _list_of_synonymous_words = ['dictionary', 'lexicon', 'definition', 'meaning', 'unabridged', 'gazetteer',
 'spellchecker', 'spellingchecker', 'thesaurus', 'synonymfinder', 'wordfinder', 'wikipedia', 'investorwords',
 'investopedia', 'wiktionary']
+
 
 #Changing isalnum to fit Python3 syntax
 def isalphanum(input_value):
@@ -247,14 +249,20 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                     'safesearch': 'Moderate',
                 })
                 while not successful_Request:
-                    try: 
+                    try:
                         _search_results = _bing_search.search(_bing_search_parameters)
-                        _search_result_count = len(_search_results["webPages"]["value"])
-                        successful_Request = True
-                    except Exception as e:
+                        if "statusCode" in _search_results:
+                            raise InvalidKeyException(_search_results["statusCode"])
+                        if "webPages" in _search_results:
+                            _search_result_count = _search_results["webPages"]["value"]
+                        else:
+                            _search_result_count = 0
+                            successful_Request = True
+                        #_search_result_count = len(_search_results["webPages"]["value"])
+                    except InvalidKeyException as e:
                         if _verbose:
-                            print("\tERROR: Method-2 - Bing search - Title-Url\n%s" %(str(e)), file = _output_file_verbose)
-                            print("\tERROR: Method-2 - Bing search - Title-Url\n%s" %(str(e)))
+                            print("\tERROR: Method-2 - Bing search - Title-Url\n%s" % (str(e)), file=_output_file_verbose)
+                            print("\tERROR: Method-2 - Bing search - Title-Url\n%s" % (str(e)))
                         _search_result_count = 0
                         unsuccessful_Count += 1
                         if unsuccessful_Count < 10:
@@ -265,12 +273,13 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                                     keys.append(line)
                                 _bing_api_key = ''.join(filter(lambda x: (ord(x) < 128), sample(keys, 1)[0].strip(' \t\n\r')))
                                 unsuccessful_Count = 0
-                        else:
-                            #_bing_api_key = input("Please enter another Bing API key: ")
-                            unsuccessful_Count = 0
-                            time.sleep(2)
-                        _bing_search._set_Bing_API_key(_bing_api_key)
-                        continue
+                            _bing_search._set_Bing_API_key(_bing_api_key)
+                    except Exception as e:
+                        if _verbose:
+                            print('\tERROR: in bing.search() - search total\n\t' + str(e))
+                        print('\tERROR: in bing.search() - search total\n\t' + str(e))
+                        unsuccessful_Count = 0
+                        exit(-1)
                 # List to save top 10 search Titles
                 _search_titles = []
                 # List to store top 10 search Urls
@@ -294,8 +303,8 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                 _number_of_valid_titles = 0
                 _number_of_valid_urls = 0
                 #for x in xrange(0, _number_of_search_results_returned):
-                    
-                    
+
+
                 #_search_title = ""
                 #_search_title = _search_titles[x]
                 #_search_title_lower_case = _search_title.lower()
@@ -324,18 +333,18 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                     #count += 1
                 if _verbose:
                     print(output)
-                    
+
                 #if count % 1000 == 0:
                 #   #print('.')
                 #   if len(pool._cache) > 4e6:
                 #       print("waiting for cache to clear...")
                 #       last.wait()
-                
+
                 #parallel_request(_search_title, _search_url, _list_of_synonymous_words, file_path)
-                
+
             #if _number_of_valid_titles > 0 or _number_of_valid_urls > 0:
 
-                with open(method2_cache_path, 'a') as method2_cache: 
+                with open(method2_cache_path, 'a') as method2_cache:
                     if True in output:
                         title_url_collocations.append(_n_gram)
                         print(_n_gram_lower + "|True", file = method2_cache)
