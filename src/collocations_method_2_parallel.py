@@ -254,10 +254,10 @@ def Collocations_Method_2_paralllel(_bing_api_key, _n_grams_from_input_text_file
                         if "statusCode" in _search_results:
                             raise InvalidKeyException(_search_results["statusCode"])
                         if "webPages" in _search_results:
-                            _search_result_count = _search_results["webPages"]["value"]
+                            _search_result_count = len(_search_results["webPages"]["value"])
                         else:
                             _search_result_count = 0
-                            successful_Request = True
+                        successful_Request = True
                         #_search_result_count = len(_search_results["webPages"]["value"])
                     except InvalidKeyException as e:
                         if _verbose:
