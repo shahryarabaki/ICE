@@ -92,13 +92,15 @@ def definitions(word, pos, debug):
 					print('\nTotal number of definitions returned: ', len(words))
 				
 		else:
-			print('Choose from one of the following senses: {VERB, NOUN, ADJ, ADV}')
+			if (debug == '--debug'):
+				print('Choose from one of the following senses: {VERB, NOUN, ADJ, ADV}')
 
 		# The list, 'words' might have duplicates which are to be removed
 		words = set(words) # converting list to set
 		words = list(words) # converting the set back to list as sets doesnot support indexing
 		if (len(words) == 0):
-			print("----------------------------------------------------------")
+			if (debug == '--debug'):
+				print("----------------------------------------------------------")
 			return 0
 		else:
 			if(debug == '--debug'):
@@ -117,7 +119,8 @@ def definitions_no_pos(word, debug):
 	if(debug == '--debug'):
 		print('\nDefinitions from WordNet:')
 	if(len(syn_sets) == 0):
-		print('WordNet does not have any synsets for the given word!')
+		if (debug == '--debug'):
+			print('WordNet does not have any synsets for the given word!')
 		return 0
 	else:
 		for synset in syn_sets:
@@ -160,10 +163,12 @@ def main_block():
 			keyword = keywords[x]
 			keyword1 = keyword
 			keyword = keyword.strip('\n')
-			print(keyword)
+			if (debug == '--debug'):
+				print(keyword)
 			tokenized_keyword = nltk.word_tokenize(keyword)
 			pos_tagged_keyword = nltk.pos_tag(tokenized_keyword) # Is a list of pos tagged words from each sentence
-			print(pos_tagged_keyword[1])
+			if (debug == '--debug'):
+				print(pos_tagged_keyword[1])
 			defnitions_returned = definitions(keyword, pos_tagged_keyword[1], debug)
 			if (defnitions_returned == 0):
 				of = open(invalid_output_file, 'a')
@@ -194,7 +199,8 @@ def synonyms_wordnet(word, pos, debug):
 			if(debug == '--debug'):
 				print('\nsynonyms from WordNet:')
 			if(len(syn_sets) == 0):
-				print('\tWordNet does not have any synsets for the given word and sense!')
+				if (debug == '--debug'):
+					print('\tWordNet does not have any synsets for the given word and sense!')
 			else:
 				for synset in syn_sets:
 					for synonyms_lemma in synset.lemmas:
@@ -227,7 +233,8 @@ def synonyms_wordnet(word, pos, debug):
 			if(debug == '--debug'):
 				print('\nDefinitions from WordNet:')
 			if(len(syn_sets) == 0):
-				print('WordNet does not have any synsets for the given word and sense!')
+				if (debug == '--debug'):
+					print('WordNet does not have any synsets for the given word and sense!')
 			else:
 				for synset in syn_sets:
 					for synonyms_lemma in synset.lemmas:
@@ -253,7 +260,8 @@ def synonyms_wordnet(word, pos, debug):
 					print('\nTotal number of definitions returned: ', len(words))
 				
 		else:
-			print('Choose from one of the following senses: {VERB, NOUN, ADJ, ADV}')
+			if (debug == '--debug'):
+				print('Choose from one of the following senses: {VERB, NOUN, ADJ, ADV}')
 
 		# The list, 'words' might have duplicates which are to be removed
 		#words = set(words) # converting list to set

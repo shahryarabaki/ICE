@@ -63,7 +63,8 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                         if _verbose:
                             print('\t', _search_phrase_parsed.replace('+', ' ').replace('%22', ''), total)
                             pass
-                        print("%s/----/%d" % (_search_phrase, total), file = f)
+                        if _verbose:
+                            print("%s/----/%d" % (_search_phrase, total), file = f)
                         return total, _bing_api_key
                 except Exception as e:
                     if _verbose:

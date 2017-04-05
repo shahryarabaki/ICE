@@ -93,7 +93,8 @@ def mwe(collocations, intersection_union = "I", debug = "", output_file = None, 
 		c = POS_tag_cleaner(collocations[x]) # Removes POS tags attached to each word in the collocation
 		c_mechanize = c
 		c_wordnet = c_mechanize.replace(' ', '_') # Converts it to wordnet understandable form
-		print(c_wordnet)
+		if (debug == '--debug'):
+			print(c_wordnet)
 		c_mechanize = c_mechanize.replace(' ', '+')
 		#print c, c_mechanize, c_wordnet
 
@@ -222,16 +223,20 @@ def mwe(collocations, intersection_union = "I", debug = "", output_file = None, 
 				lists[z] = definitions(w[z], tag, debug) 
 				if((lists[z] == 0) or (len(lists[z]) == 0)): 
 					lists[z] = webster_dictionary[w[z]]
-					if((lists[z] == 0) or (len(lists[z]) == 0)): 
-						print("No definitions in Webster dictionary!!")
+					if((lists[z] == 0) or (len(lists[z]) == 0)):
+						if (debug == '--debug'):
+							print("No definitions in Webster dictionary!!")
 						if (tag == "null"):
 							lists[z] = wordnik_def_no_POS(w[z], debug)
-							print("WordNik without POS tag info", lists[z])
+							if (debug == '--debug'):
+								print("WordNik without POS tag info", lists[z])
 						else:
 							lists[z] = wordnik_def(w[z], tag, debug)
-							print("WordNik with POS tag info", lists[z])
-						if((lists[z] == 0) or (len(lists[z]) == 0)): # If WordNik does not have any definition, online dictionary is used 
-							print("I'm HERE!! -  A")
+							if (debug == '--debug'):
+								print("WordNik with POS tag info", lists[z])
+						if((lists[z] == 0) or (len(lists[z]) == 0)): # If WordNik does not have any definition, online dictionary is used
+							if (debug == '--debug'):
+								print("I'm HERE!! -  A")
 							(pos_definitions, lists[z]) = definitions_m(w[z], debug)
 							if(len(lists[z]) > 0):
 								list_of_word_definitions = []
@@ -242,15 +247,18 @@ def mwe(collocations, intersection_union = "I", debug = "", output_file = None, 
 									i = unicodedata.normalize('NFKD', i).encode('ascii','ignore')
 									list_of_word_definitions.append(i)
 								lists[z] = list_of_word_definitions
-								print("I'm HERE!! -  B")
+								if (debug == '--debug'):
+									print("I'm HERE!! -  B")
 						
 							elif(len(lists[z]) == 0):
-								print("I'm HERE!! -  C")
-								print("No definitions from dictionary.reference.com!!")
+								if (debug == '--debug'):
+									print("I'm HERE!! -  C")
+									print("No definitions from dictionary.reference.com!!")
 								lists[z] = urban_dict(w[z], debug)
 							
 								if(lists[z] == 0): # If online dictionaries does not have any definition, Bing is used
-									print("No definitions from Urban dictionary!!")
+									if (debug == '--debug'):
+										print("No definitions from Urban dictionary!!")
 									lists[z] = internet_search(debug, w[z], key)
 								
 									if(lists[z] == 0):
@@ -613,7 +621,8 @@ if __name__ == '__main__':
 	#collocations.append('kick_NN the_DT bucket_NN ') # Dictionary.com doesn't work for idioms
 	#"""
 
-	print("Intersection, union or both? Select from (I | U | B)")
+	if (debug == '--debug'):
+		print("Intersection, union or both? Select from (I | U | B)")
 	intersection_union = input().upper()
 	if (len(intersection_union) == 1):
 		debug = "--debug"
@@ -660,6 +669,8 @@ if __name__ == '__main__':
 			#output_file = ""
 			mwe(collocations, intersection_union, debug, output_file, Bing_API_key = key)
 		else:
-			print("Choose one from (I, U, B)\nExiting the script...")
+			if (debug == '--debug'):
+				print("Choose one from (I, U, B)\nExiting the script...")
 	else:
-		print("Choose one from (I, U, B)\nExiting the script...") 
+		if (debug == '--debug'):
+			print("Choose one from (I, U, B)\nExiting the script...")

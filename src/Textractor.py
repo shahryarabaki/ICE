@@ -173,13 +173,15 @@ class CollocationExtractor:
                     # Obtain the phrase search totals
                     count = 0
                     length = len(_n_grams_from_input_text_file)
-                    print(length)
+                    if self._verbose:
+                        print(length)
                     int_percent = 0
                     for _n_gram in _n_grams_from_input_text_file:
                         count += 1
                         if int((count * 100) / length) > int_percent:
                             int_percent = int((count * 100) / length)
-                            print(str(int_percent) + "%")
+                            if self._verbose:
+                                print(str(int_percent) + "%")
                         # Remove the POS tags attached
                         _n_gram = POS_tag_cleaner(_n_gram)
                         _phrase_search_total_dictionary[_n_gram], self._bing_api_key = _bing_search.search_total(False, _n_gram)
@@ -194,7 +196,8 @@ class CollocationExtractor:
                     count += 1
                     if int((count * 100) / length) > int_percent:
                         int_percent = int((count * 100) / length)
-                        print(int_percent)
+                        if self._verbose:
+                            print(int_percent)
                     ## TODO: don't search for words that appear only in n-grams with wrong POS tags
                     # Remove the POS tags attached
                     _n_gram = POS_tag_cleaner(_n_gram)
@@ -320,54 +323,66 @@ class CollocationExtractor:
 
         if args.collocation:
             self._extract_collocations = True
-            print("Collocation extraction turned on")
+            if self._verbose:
+                print("Collocation extraction turned on")
 
         if args.ngram:
             self._extract_n_grams = True
-            print("Extract n-grams from sentences, temporarily this.")
+            if self._verbose:
+                print("Extract n-grams from sentences, temporarily this.")
         else:
             self._extract_n_grams = False
 
 
         if args.method1:
-            print("Method 1 Dictionary enabled")
+            if self._verbose:
+                print("Method 1 Dictionary enabled")
             self._collocation_method_1 = True
 
         if args.method2:
-            print("Method 2 web title enabled")
+            if self._verbose:
+                print("Method 2 web title enabled")
             self._collocation_method_2 = True            
 
         if args.method3:
-            print("Method 3 substitution enabled")
+            if self._verbose:
+                print("Method 3 substitution enabled")
             self._collocation_method_3 = True
 
         if args.method5:
-            print("Method 5 independence enabled")
+            if self._verbose:
+                print("Method 5 independence enabled")
             self._collocation_method_5 = True
 
         if args.bing:
             self._collocation_corpora = ['B']
-            print("Bing corpura included, temporarily bing api key not needed")
+            if self._verbose:
+                print("Bing corpura included, temporarily bing api key not needed")
         elif args.other:
             self._collocation_corpora = args.other
-            print("Corpora used: ", end = '')
-            print(self._collocation_corpora)
+            if self._verbose:
+                print("Corpora used: ", end = '')
+                print(self._collocation_corpora)
 
 
         self._apply_POS_restrictions = args.pos
         if self._apply_POS_restrictions:
-            print("POS enabled")
+            if self._verbose:
+                print("POS enabled")
 
         self._stop_word_removal = args.stopwords
         if self._stop_word_removal:
-            print("Stop-words removal enabled")
+            if self._verbose:
+                print("Stop-words removal enabled")
 
         self._input_file_path = args.filename
-        print("File location: {}".format(self._input_file_path))
+        if self._verbose:
+            print("File location: {}".format(self._input_file_path))
 
         if args.nvalue:
             self._n_value_for_ngram_extraction = args.nvalue
-            print("N-value: %d" % (self._n_value_for_ngram_extraction))
+            if self._verbose:
+                print("N-value: %d" % (self._n_value_for_ngram_extraction))
 
         self._verbose = args.verbose
         if self._verbose:

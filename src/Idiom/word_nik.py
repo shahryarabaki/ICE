@@ -113,11 +113,13 @@ def main_block():
             keyword = keywords[x]
             keyword1 = keyword
             keyword = keyword.strip('\n')
-            print(keyword)
+            if (debug == '--debug'):
+                print(keyword)
             tokenized_keyword = nltk.word_tokenize(keyword)
             pos_tagged_keyword = nltk.pos_tag(tokenized_keyword)
                 # Is a list of pos tagged words from each sentence
-            print(pos_tagged_keyword[1])
+            if (debug == '--debug'):
+                print(pos_tagged_keyword[1])
             defnitions_returned = wordnik_def(keyword, pos_tagged_keyword[1], debug)
             if (defnitions_returned == 0):
                 of = open(invalid_output_file, 'a')

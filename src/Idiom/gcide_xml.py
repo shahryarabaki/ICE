@@ -94,7 +94,7 @@ def extract_definitions():
 			node.clear()
 			#root.clear()
 
-	print(len(key_list), len(definitions_list), len(webster_dictionary))
+	#print(len(key_list), len(definitions_list), len(webster_dictionary))
 	return webster_dictionary
 
 def itertext(self):

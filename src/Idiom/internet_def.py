@@ -114,7 +114,7 @@ def main_block():
             keyword = keywords[x]
             keyword1 = keyword
             keyword = keyword.strip('\n')
-            print(keyword)
+            #print(keyword)
             #tokenized_keyword = nltk.word_tokenize(keyword)
             #pos_tagged_keyword = nltk.pos_tag(tokenized_keyword) # Is a list of pos tagged words from each sentence
             #print pos_tagged_keyword[1]
