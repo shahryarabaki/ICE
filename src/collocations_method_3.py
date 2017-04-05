@@ -930,8 +930,8 @@ def Collocations_Method_3(_bing_api_key, _n_grams_from_input_text_file, _input_f
 		#queries_with_quotes = [('"' + x + '"') for x in search_queries_to_be_physicall_requested]
 		_bing_search = BingSearchAPI(_bing_api_key)
 		for bing_query in search_queries:
-			bing_query_with_quotes = '"' + bing_query + '"'
-			search_queries[bing_query], _bing_api_key = _bing_search.search_total(False, bing_query_with_quotes)
+			#bing_query_with_quotes = '"' + bing_query + '"'
+			search_queries[bing_query], _bing_api_key = _bing_search.search_total(False, bing_query)
 			
 
 	doCalculation = True

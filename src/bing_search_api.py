@@ -84,7 +84,7 @@ class BingSearchAPI():
         #_search_phrase_parsed = "%22" + _search_phrase.replace(' ', '+').strip(' ') + "%22" # %22 acts as quotes, facilitating a phrase search
         #_search_phrase_parsed = "%22" + quote(_search_phrase.strip(' ')) + "%22"
         #_bing_parameters = {'$format': 'json', '$top': 2}
-        _search_phrase_parsed = _search_phrase.strip(' ')
+        _search_phrase_parsed = '"' + _search_phrase.strip(' ') + '"'
         _bing_parameters = urllib.parse.urlencode({
             # Request parameters
             'q': _search_phrase_parsed,
