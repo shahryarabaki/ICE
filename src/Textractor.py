@@ -135,7 +135,6 @@ class CollocationExtractor:
         _n_grams_from_input_text_file = pos_tagged_ngrams_from_sentences(sentences, n_value, False, False)
 
 
-
         final_collocations = []
 
         if self._extract_collocations:
@@ -185,8 +184,8 @@ class CollocationExtractor:
                         # Remove the POS tags attached
                         _n_gram = POS_tag_cleaner(_n_gram)
                         _phrase_search_total_dictionary[_n_gram], self._bing_api_key = _bing_search.search_total(False, _n_gram)
-                        if self._verbose:
-                            print(_n_gram + '\t' + str(_phrase_search_total_dictionary[_n_gram]), file = _output_file_verbose)
+                        #if self._verbose:
+                        #    print(_n_gram + '\t' + str(_phrase_search_total_dictionary[_n_gram]), file = _output_file_verbose)
 
                 # A dictionary to store the search results of individual words in the n-grams
                 count = 0
@@ -208,8 +207,8 @@ class CollocationExtractor:
                         _word = _word.lstrip(' ').rstrip(' ').strip('\n')
                         if not _word in _individual_word_hit_results:
                             _individual_word_hit_results[_word], self._bing_api_key = _bing_search.search_total(False, _word)
-                            if self._verbose:
-                                print(_word + '\t' + str(_individual_word_hit_results[_word]), file = _output_file_verbose)
+                            #if self._verbose:
+                            #    print(_word + '\t' + str(_individual_word_hit_results[_word]), file = _output_file_verbose)
 
                 # A file to write the search totals of individual words and n-gram phrases
                 output_file_path_word_totals = str(self._input_file_path).replace(self._input_file_path.split('/')[-1], 'Bing_Individual_word_totals.txt')
