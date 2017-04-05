@@ -104,10 +104,10 @@ class BingSearchAPI():
                     count = count + 1
                     try:
                         res = self.search(_bing_parameters)
-                        if len(res["rankingResponse"]) == 0:
-                            total_search_results = 0
-                        else:
+                        if "webPages" in res:
                             total_search_results = res["webPages"]["totalEstimatedMatches"]
+                        else:
+                            total_search_results = 0
                         if _verbose:
                             print('-----' + str(total_search_results) + '-----------')
                         total = int(total_search_results)

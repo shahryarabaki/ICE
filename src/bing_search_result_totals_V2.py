@@ -52,10 +52,10 @@ def bing_search_total(_verbose, _search_phrase, _bing_api_key):
                 try:
                     _bing_search = BingSearchAPI(_bing_api_key)
                     res = _bing_search.search(_bing_parameters)
-                    if len(res["rankingResponse"]) == 0:
-                        total_search_results = 0
-                    else:
+                    if "webPages" in res:
                         total_search_results = res["webPages"]["totalEstimatedMatches"]
+                    else:
+                        total_search_results = 0
                     if _verbose:
                         print('-----' + str(total_search_results) + '-----------')
                     total = int(total_search_results)
