@@ -564,7 +564,7 @@ def mwe(collocations, intersection_union = "I", debug = "", output_file = None, 
 			return union_result
 
 	elif (option == 'B'):
-		return intersection_result+union_result
+		return intersection_result + list(set(union_result) - set(intersection_result))
 		if (debug == '--debug'):
 			print("\nTotal number of collocations that were MWEs - UNION:%d" %counter_union)
 			print("Total number of collocations that were MWEs - INTERSECTION:%d" %counter_intersection)
