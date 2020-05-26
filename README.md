@@ -8,7 +8,7 @@ Code and supplemental materials for the following studies:
 
 
 
-How to run:
+## How to run:
 
      - 'example_collocation.py' are 'example_idiom.py' are samples for running the code.
      - Bing API subscription key is required for running the sample code.
