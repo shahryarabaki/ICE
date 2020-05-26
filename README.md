@@ -16,5 +16,5 @@ Code and supplemental materials for the following studies:
        https://www.microsoft.com/cognitive-services/en-US/subscriptions for free (with limited number of queries)
 
 ## License 
-The code and materials are made available without warranty for research, teaching ad scholarship purposes only, with further parameters in the spirit of a Creative Commons Attribution-NonCommercial License. You are free to use the provided resources as long as you attribute the authors by citing the orginal CICLING16, RANLP15 and EACL17 papers. For other uses or questions, please contact Prof. [Rakesh Verma](http://www2.cs.uh.edu/~rmverma/)
+The code and materials are made available without warranty for research, teaching ad scholarship purposes only, with further parameters in the spirit of a Creative Commons Attribution-NonCommercial License. You are free to use the provided resources as long as you attribute the authors by citing the orginal CICLING16, RANLP15 and EACL17 papers. For other uses or questions, please contact [Prof. Rakesh Verma](http://www2.cs.uh.edu/~rmverma/)
 
